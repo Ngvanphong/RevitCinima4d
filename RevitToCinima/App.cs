@@ -13,6 +13,8 @@ namespace RevitToCinima
     {
         public Result OnStartup(UIControlledApplication a)
         {
+            CinimaButton CinimaButtonClass = new CinimaButton();
+            CinimaButtonClass.RevitTo(a);
             return Result.Succeeded;
         }
 
