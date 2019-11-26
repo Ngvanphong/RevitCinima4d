@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command RevitToCinima</Text>
+    <Description>Some description for RevitToCinima</Description>
+    <Assembly>RevitToCinima.dll</Assembly>
+    <FullClassName>RevitToCinima.Command</FullClassName>
+    <ClientId>60a620e0-f218-41a1-8dfa-fb6ea0da5c9d</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application RevitToCinima</Name>
+    <Assembly>RevitToCinima.dll</Assembly>
+    <FullClassName>RevitToCinima.App</FullClassName>
+    <ClientId>51105285-5ccf-449e-9c6a-508e6e7034c5</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
