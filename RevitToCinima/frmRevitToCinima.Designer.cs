@@ -28,13 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnExportCinima = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // btnExportCinima
+            // 
+            this.btnExportCinima.Location = new System.Drawing.Point(488, 402);
+            this.btnExportCinima.Name = "btnExportCinima";
+            this.btnExportCinima.Size = new System.Drawing.Size(75, 23);
+            this.btnExportCinima.TabIndex = 0;
+            this.btnExportCinima.Text = "Export";
+            this.btnExportCinima.UseVisualStyleBackColor = true;
+            this.btnExportCinima.Click += new System.EventHandler(this.btnExportCinima_Click);
             // 
             // frmRevitToCinima
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(575, 437);
+            this.Controls.Add(this.btnExportCinima);
             this.MinimizeBox = false;
             this.Name = "frmRevitToCinima";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -46,5 +58,7 @@
         }
 
         #endregion
+
+        public System.Windows.Forms.Button btnExportCinima;
     }
 }

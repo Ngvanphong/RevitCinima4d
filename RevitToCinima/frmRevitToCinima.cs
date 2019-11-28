@@ -25,5 +25,10 @@ namespace RevitToCinima
         {
 
         }
+
+        private void btnExportCinima_Click(object sender, EventArgs e)
+        {
+            _eventRevit.Raise();
+        }
     }
 }
