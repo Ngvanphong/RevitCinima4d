@@ -18,13 +18,12 @@ namespace RevitToCinima
         {
             Document doc = app.ActiveUIDocument.Document;
             var collector = new FilteredElementCollector(doc).WhereElementIsNotElementType().ToList();
+            var collectSelection = app.ActiveUIDocument.Selection.GetElementIds();
             List<Element> allElements = new List<Element>();
-            foreach (Element e in collector)
+            foreach (ElementId id in collectSelection)
             {
-                if (e.Category != null && e.Category.HasMaterialQuantities)
-                {
-                    allElements.Add(e);
-                }
+                Element el = doc.GetElement(id);
+                allElements.Add(el);
             }
             SaveFileDialog save = new SaveFileDialog();
             save.Filter = "Xml|*.xml";
@@ -68,36 +67,54 @@ namespace RevitToCinima
                         GeometryInstance instance = obj as GeometryInstance;
                         if (instance != null)
                         {
-                            GeometryElement instanceGeometryElement = instance.GetSymbolGeometry();
-                            foreach (GeometryObject instanceObj in instanceGeometryElement)
-                            {
-                                Solid solid = instanceObj as Solid;
-                                if (solid == null || 0 == solid.Faces.Size || solid.Edges.Size == 0)
-                                {
-                                    continue;
-                                };
-                                foreach (Face face in solid.Faces)
-                                {
-                                    writer.WriteStartElement("Face");
-                                    string nameMaterial = doc.GetElement(face.MaterialElementId).Name;
-                                    writer.WriteStartElement("Material");
-                                    writer.WriteString(nameMaterial);
-                                    writer.WriteEndElement();
-                                    Mesh mesh = face.Triangulate();
-                                    for (int i = 0; i < mesh.NumTriangles; i++)
-                                    {
-                                        MeshTriangle triangle = mesh.get_Triangle(i);
-                                        for (int g = 0; g < 3; g++)
-                                        {
-                                            writer.WriteStartElement("Point");
-                                            XYZ point = triangle.get_Vertex(g);
-                                            writer.WriteString(point.ToString());
-                                            writer.WriteEndElement();
-                                        }
-                                    };
-                                    writer.WriteEndElement();
-                                }
-                            }
+                            WriteFamily(instance, writer, doc);
+                            //GeometryElement instanceGeometryElement = instance.GetSymbolGeometry();
+                            //foreach (GeometryObject instanceObj in instanceGeometryElement)
+                            //{
+                            //   if(instanceObj.IsElementGeometry == true)
+                            //    {
+
+                            //    }else
+                            //    {
+                            //        Solid solid = instanceObj as Solid;
+                            //        if (solid == null || 0 == solid.Faces.Size || solid.Edges.Size == 0)
+                            //        {
+                            //            continue;
+                            //        };
+                            //        Transform instTransform = instance.Transform;
+                            //        foreach (Face face in solid.Faces)
+                            //        {
+                            //            writer.WriteStartElement("Face");
+                            //            writer.WriteStartElement("Material");
+                            //            try
+                            //            {
+                            //                string nameMaterial = doc.GetElement(face.MaterialElementId).Name;
+                            //                writer.WriteString(nameMaterial);
+                            //                writer.WriteEndElement();
+                            //            }
+                            //            catch
+                            //            {
+                            //                writer.WriteString("NoMaterial");
+                            //                writer.WriteEndElement();
+                            //            }
+                            //            Mesh mesh = face.Triangulate();
+                            //            for (int i = 0; i < mesh.NumTriangles; i++)
+                            //            {
+                            //                MeshTriangle triangle = mesh.get_Triangle(i);
+                            //                for (int g = 0; g < 3; g++)
+                            //                {
+                            //                    writer.WriteStartElement("Point");
+                            //                    XYZ point = triangle.get_Vertex(g);
+                            //                    XYZ transformedPoint = instTransform.OfPoint(point);
+                            //                    writer.WriteString(transformedPoint.ToString());
+                            //                    writer.WriteEndElement();
+                            //                }
+                            //            };
+                            //            writer.WriteEndElement();
+                            //        }
+                            //    }
+
+                            //}
                         }
                         else
                         {
@@ -105,7 +122,7 @@ namespace RevitToCinima
                             if (solid == null || 0 == solid.Faces.Size || solid.Edges.Size == 0)
                             {
                                 continue;
-                            };                       
+                            };
                             foreach (Face face in solid.Faces)
                             {
                                 writer.WriteStartElement("Face");
@@ -126,7 +143,7 @@ namespace RevitToCinima
                                     }
                                 };
                                 writer.WriteEndElement();
-                            }                         
+                            }
                         }
                     }
                 }
@@ -135,5 +152,55 @@ namespace RevitToCinima
             }
             writer.WriteEndElement();
         }
+
+        public void WriteFamily(GeometryInstance instance, XmlTextWriter writer, Document doc)
+        {
+
+            GeometryElement instanceGeometryElement = instance.GetSymbolGeometry();
+            foreach (GeometryObject instanceObj in instanceGeometryElement)
+            {
+                Solid solid = instanceObj as Solid;
+                if (solid == null || 0 == solid.Faces.Size || solid.Edges.Size == 0)
+                {
+                    GeometryInstance instanceNew = instanceObj as GeometryInstance;
+                    WriteFamily(instanceNew, writer, doc);
+                }else
+                {
+                    Transform instTransform = instance.Transform;
+                    foreach (Face face in solid.Faces)
+                    {
+                        writer.WriteStartElement("Face");
+                        writer.WriteStartElement("Material");
+                        try
+                        {
+                            string nameMaterial = doc.GetElement(face.MaterialElementId).Name;
+                            writer.WriteString(nameMaterial);
+                            writer.WriteEndElement();
+                        }
+                        catch
+                        {
+                            writer.WriteString("NoMaterial");
+                            writer.WriteEndElement();
+                        }
+                        Mesh mesh = face.Triangulate();
+                        for (int i = 0; i < mesh.NumTriangles; i++)
+                        {
+                            MeshTriangle triangle = mesh.get_Triangle(i);
+                            for (int g = 0; g < 3; g++)
+                            {
+                                writer.WriteStartElement("Point");
+                                XYZ point = triangle.get_Vertex(g);
+                                XYZ transformedPoint = instTransform.OfPoint(point);
+                                writer.WriteString(transformedPoint.ToString());
+                                writer.WriteEndElement();
+                            }
+                        };
+                        writer.WriteEndElement();
+                    }
+
+                }
+            }
+        }
+
     }
 }
