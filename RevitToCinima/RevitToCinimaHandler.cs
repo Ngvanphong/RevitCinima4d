@@ -50,7 +50,6 @@ namespace RevitToCinima
             return "RevitToCinimar4dHandler";
         }
 
-
         public void CreateDataXml(XmlTextWriter writer, List<Element> listElements, Document doc)
         {
             Options opt = new Options();
@@ -91,7 +90,6 @@ namespace RevitToCinima
                     }
                 }
                 writer.WriteEndElement();
-
             }
             writer.WriteEndElement();
         }
@@ -112,7 +110,6 @@ namespace RevitToCinima
                             WriteFamilySub(aSubElem, writer, doc);
                         }
                     }
-
                 }
                
             }else
@@ -132,7 +129,6 @@ namespace RevitToCinima
                         continue;
                     };
                     WriteFaceSolid(solid, writer, doc);
-
                 }
                 writer.WriteEndElement();
             }
@@ -202,7 +198,6 @@ namespace RevitToCinima
             foreach (Face face in solid.Faces)
             {
                 writer.WriteStartElement("Face");
-
                 writer.WriteStartElement("Material");
                 try
                 {
