@@ -70,8 +70,9 @@ namespace RevitToCinima
                 
                 GeometryElement geo = element.get_Geometry(opt);
                 writer.WriteStartElement("Name");
+                writer.WriteStartElement("NameElement");
                 writer.WriteString(element.Name);
-
+                writer.WriteEndElement();
                 foreach (GeometryObject obj in geo)
                 {
                     GeometryInstance instance = obj as GeometryInstance;
