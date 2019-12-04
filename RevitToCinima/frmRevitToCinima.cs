@@ -41,30 +41,34 @@ namespace RevitToCinima
             OpenFileDialog file = new OpenFileDialog();
             file.Filter = "Xml Files|*.xml";
             file.Multiselect = false;
+            List<GroupElementRevit> listResult = new List<GroupElementRevit>();
             if (file.ShowDialog() == DialogResult.OK)
             {
-                List<GroupElementRevit> listResult = new List<GroupElementRevit>();
                 string fullPath = Path.GetFullPath(file.FileName);
                 var xmlDoc = XDocument.Load(fullPath);
                 var xmlElement = xmlDoc.Element("Table").Element("Element").Elements("Name");
                 foreach (var item in xmlElement)
                 {
-                    string elementName = item.Element("NameElement").Value;
+                    string elementName = string.Empty;
+                    try
+                    {
+                        elementName  = item.Element("NameElement").Value;
+                        var faceElements = item.Elements("Face").First().Elements("Point");
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    
+                    bool addNew = false;
                     if (!listResult.Exists(x => x.NameElement == elementName))
                     {
                         var faceElements = item.Elements("Face");
-                        bool faceFist = true;
                         foreach (var face in faceElements)
                         {
-                            if (faceFist)
-                            {
-                                listResult.Add(CreateNewGorupFaceFirist(item, elementName));
-                                faceFist = false;
-                            }else
-                            {
-                                ModifiedOrAddFace(face, ref listResult, elementName);
-                            }
-
+                            listResult.Add(CreateNewGorupFaceFirist(item, elementName));
+                            addNew = true;
+                            break;
                         }
                     }
                     else
@@ -72,14 +76,31 @@ namespace RevitToCinima
                         var faceElements = item.Elements("Face");
                         foreach (var face in faceElements)
                         {
-                            ModifiedOrAddFace(face, ref listResult, elementName);
+                            var newE = ModifiedOrAddFace(face, listResult, elementName);
+                            if (!string.IsNullOrEmpty(newE.NameElement))
+                            {
+                                listResult.Add(newE);
+                            }
+                        }
+                    }
+                    if (addNew == true && item.Elements("Face").Count() > 1)
+                    {
+                        for (int i = 1; i < item.Elements("Face").Count(); i++)
+                        {
+                            XElement face = item.Elements("Face").ElementAt(i);
+                            var newE = ModifiedOrAddFace(face, listResult, elementName);
+                            if (!string.IsNullOrEmpty(newE.NameElement))
+                            {
+                                listResult.Add(newE);
+                            }
                         }
                     }
                 }
-
+            }
+            if (listResult.Count() > 0)
+            {
                 ///Writer file again.
                 WriteFileAgain(listResult);
-
             }
 
         }
@@ -151,7 +172,7 @@ namespace RevitToCinima
             return newGoup;
         }
 
-        private GroupElementRevit CreateNewFace(XElement face, string elementName,string material)
+        private GroupElementRevit CreateNewFace(XElement face, string elementName, string material)
         {
             GroupElementRevit groupNew = new GroupElementRevit();
             groupNew.NameElement = elementName;
@@ -169,9 +190,11 @@ namespace RevitToCinima
             return groupNew;
         }
 
-        private void ModifiedOrAddFace(XElement face,ref List<GroupElementRevit> listResult,string elementName)
+        private GroupElementRevit ModifiedOrAddFace(XElement face, List<GroupElementRevit> listResult, string elementName)
         {
+            GroupElementRevit newElement = new GroupElementRevit();
             string materialValue = face.Element("Material").Value;
+
             foreach (GroupElementRevit goup in listResult)
             {
                 string goupName = goup.NameElement;
@@ -189,16 +212,14 @@ namespace RevitToCinima
                                 string pointValue = point.Value;
                                 materialP.ListPoint.Add(pointValue);
                             }
-                            break;
+                            return newElement; 
                         }
-                        else
-                        {
-                           listResult.Add(CreateNewFace(face, elementName, materialName));
-                            break;
-                        }
-                    }                  
+                        
+                    }                     
                 }
             }
+            newElement = CreateNewFace(face, elementName, materialValue);
+            return newElement;
         }
 
 
