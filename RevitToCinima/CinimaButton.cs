@@ -36,7 +36,7 @@ namespace RevitToCinima
             }
             Image img = RevitToCinima.Properties.Resources.icons8_movie_32;
             ImageSource imgSrc = Helper.GetImageSource(img);
-            PushButtonData btnData = new PushButtonData("RevitCinima", "RevitCinima",
+            PushButtonData btnData = new PushButtonData("RevitCinema", "RevitCinema",
                 Assembly.GetExecutingAssembly().Location, "RevitToCinima.RevitToCinimaBinding")
             {
                 ToolTip = "Export element from revit to cinima4d",
