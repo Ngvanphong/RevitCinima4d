@@ -34,7 +34,7 @@
             // 
             // btnExportCinima
             // 
-            this.btnExportCinima.Location = new System.Drawing.Point(416, 391);
+            this.btnExportCinima.Location = new System.Drawing.Point(31, 15);
             this.btnExportCinima.Name = "btnExportCinima";
             this.btnExportCinima.Size = new System.Drawing.Size(75, 34);
             this.btnExportCinima.TabIndex = 0;
@@ -44,7 +44,7 @@
             // 
             // btnCompress
             // 
-            this.btnCompress.Location = new System.Drawing.Point(497, 391);
+            this.btnCompress.Location = new System.Drawing.Point(133, 15);
             this.btnCompress.Name = "btnCompress";
             this.btnCompress.Size = new System.Drawing.Size(85, 34);
             this.btnCompress.TabIndex = 1;
@@ -56,9 +56,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(590, 437);
+            this.ClientSize = new System.Drawing.Size(240, 63);
             this.Controls.Add(this.btnCompress);
             this.Controls.Add(this.btnExportCinima);
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmRevitToCinima";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

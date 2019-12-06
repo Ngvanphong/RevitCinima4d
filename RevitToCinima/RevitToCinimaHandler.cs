@@ -119,7 +119,10 @@ namespace RevitToCinima
                 opt.ComputeReferences = true;
                 GeometryElement geo = anElem.get_Geometry(opt);
                 writer.WriteStartElement("Name");
+
+                writer.WriteStartElement("NameElement");
                 writer.WriteString(anElem.Name);
+                writer.WriteEndElement();
 
                 foreach (GeometryObject obj in geo)
                 {
