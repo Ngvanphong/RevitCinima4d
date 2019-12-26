@@ -5,4 +5,3 @@ C:\Users\Windows 10\Documents\RevitToCinimaAddin\RevitToCinima\RevitToCinima\obj
 C:\Users\Windows 10\Documents\RevitToCinimaAddin\RevitToCinima\RevitToCinima\obj\Debug\RevitToCinima.frmRevitToCinima.resources
 C:\Users\Windows 10\Documents\RevitToCinimaAddin\RevitToCinima\RevitToCinima\obj\Debug\RevitToCinima.Properties.Resources.resources
 C:\Users\Windows 10\Documents\RevitToCinimaAddin\RevitToCinima\RevitToCinima\obj\Debug\RevitToCinima.csproj.GenerateResource.Cache
-C:\Users\Windows 10\Documents\RevitToCinimaAddin\RevitToCinima\RevitToCinima\obj\Debug\RevitToCinima.csprojResolveAssemblyReference.cache

@@ -13,8 +13,8 @@ namespace RevitToCinima
     {
         public void RevitTo(UIControlledApplication application)
         {
-            const string ribbonTag = "ArmoApiVn";
-            const string ribbonPanel = "Element";
+            const string ribbonTag = "ArmoApiVn2";
+            const string ribbonPanel = "Element2";
             try
             {
                 application.CreateRibbonTab(ribbonTag);
